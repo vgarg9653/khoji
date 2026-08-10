@@ -104,7 +104,7 @@ I couldn't read the Airtable form (it needs a real browser), so map by hand:
 > deterministic rules over government PDFs. Twelve real extraction failures
 > shaped that — "maximum 4 years duration" became an age limit of 4, a table row
 > label became a ₹2 benefit, one PDF covering three schemes labelled a
-> university scholarship "class 9–10". Each is now a regression test; 138 tests
+> university scholarship "class 9–10". Each is now a regression test; 224 tests
 > plus a 21-check live smoke test, because four of the bugs passed every unit
 > test and only showed up end-to-end.
 
@@ -121,7 +121,7 @@ I couldn't read the Airtable form (it needs a real browser), so map by hand:
 
 - **Update the pitch deck.** Slide 15 shows an illustrative conversation — you
   can now screenshot the real one. Slide 13's "15–20 hand-verified schemes"
-  understates it: 219 served, 22 Rajasthan-specific.
+  understates it: 298 served, 22 Rajasthan-specific.
 - **Register your own WhatsApp number** so evaluators can message it directly
   (~30 min, irreversible for that SIM). Not required — the web demo has no limit.
 
@@ -135,12 +135,12 @@ recipients. That's a Meta account tier, not a product limit. **The web demo has
 no such limit and is the same bot.**
 
 **"How much of this is real?"**
-219 scholarships crawled from government sources, 68 re-verified against their
+298 scholarships crawled from official sources, 68 re-verified against their
 official pages, 22 specific to Rajasthan with Hindi names. Live on Cloud Run and
-WhatsApp Cloud API. 138 tests.
+WhatsApp Cloud API. 224 tests.
 
 **"What doesn't work yet?"**
-144 of 219 records have no income ceiling — the government PDFs don't legibly
+152 of 298 records have no income ceiling — the sources don't legibly
 publish one, and the bot says so rather than guessing. Voice notes need the
 model, which is on a free tier capped at 20 calls/day. Mentor matching is V3 and
 deliberately not built, because it involves minors and the safety infrastructure

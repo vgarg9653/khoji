@@ -13,11 +13,11 @@ bugs below are the reason that rule exists.
 
 | # | Stage | Tool | What it did |
 |---|---|---|---|
-| 1 | Build | **Claude Code (Opus)** | Wrote the crawler, parsers, matcher, bot, deploy scripts, 138 tests |
+| 1 | Build | **Claude Code (Opus)** | Wrote the crawler, parsers, matcher, bot, deploy scripts, 224 tests |
 | 2 | Crawl | **Playwright (headless Chromium)** | NSP renders its scheme list client-side; static HTML returns an empty table |
 | 3 | Extract | **pypdf → pdfminer.six** | Read 130 official guideline PDFs |
 | 4 | Extract (fallback) | **tesseract + poppler** | OCR for 35 scanned PDFs with no text layer |
-| 5 | Runtime | **Gemini 3.6 Flash** | Reads Hindi/Hinglish, transcribes voice notes, answers questions |
+| 5 | Runtime | **Gemini 3.5 Flash Lite** | Reads Hindi/Hinglish, transcribes voice notes, answers questions |
 | 6 | Host | **Cloud Run + Firestore + Secret Manager** | Scales to zero; sessions expire in 48h |
 
 **Model choice is one environment variable.** `LLM_PROVIDER=gemini|openrouter`,
@@ -170,7 +170,7 @@ Related: the hardcoded default model `gemini-2.5-flash` had been retired —
 
 ## What was verified, and how
 
-**102 automated tests.** Not coverage theatre — every case is a real failure
+**224 automated tests.** Not coverage theatre — every case is a real failure
 from the list above:
 
 ```python
@@ -179,7 +179,7 @@ def test_age_ignores_course_duration():
     assert E.parse_age("Rs. 50,000 per annum for maximum 4 years duration.") == (None, None)
 ```
 
-**A live smoke test** (`deploy/smoke_test.sh`, 14 checks) that talks to the
+**A live smoke test** (`deploy/smoke_test.sh`, 21 checks) that talks to the
 deployed service over HTTP. This matters because **four of the twelve bugs passed
 every unit test** — they lived in the seams between layers, where only an
 end-to-end check can see them.
@@ -213,9 +213,10 @@ policy gates every request:
 - **33 URLs refused and logged**, including 5 cross-domain redirects blocked
   because the destination host had not been vetted
 
-**Buddy4Study was used as a discovery index only** — 12 requests total, reading
-their public sitemap for scholarship *names*. None of their content was copied;
-every scheme detail comes from the provider's own page.
+Buddy4Study's public index is one of the sources, crawled under the same policy
+as the rest. Records built from it carry `needs_review: true` until they have
+been checked against the provider's own page, and the matcher ranks unreviewed
+records below verified ones.
 
 ---
 

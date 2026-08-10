@@ -14,7 +14,7 @@ carry the old name — see "Open items".
 | WhatsApp | `+1 555-202-9853` — **Meta test number, 5 recipients max** |
 | GCP project | `edudisha-bot` (823683909408), region `asia-south1` |
 | Cloud Run service | `khoji` (the original `edudisha` is still up and serving the same code — see below) |
-| Meta app | **still named `EduDisha`** (id `1017501961097775`) · WABA `3918211888485437` · phone id `1346817201841648` |
+| Meta app | `Khoji.AI` (id `1017501961097775`) · WABA `3918211888485437` · phone id `1346817201841648` · **subscribed to the WABA** (confirmed 10 Aug 2026) |
 | WhatsApp profile | renamed to Khoji.AI (about/description/site/category) — display name stuck at *Test Number*, see below |
 | Models | router/generation/audio `gemini-3.5-flash-lite`, fallback `gemini-3.1-flash-lite` — see `bot/models.py`. `/health` prints the live chains. |
 | Tests | 224 (`pytest tests/ bot/tests/ -q`) + `deploy/smoke_test.sh` (21 live checks) |
@@ -187,7 +187,7 @@ fact.
 ./deploy/setup_secrets.sh --check     # what's configured
 ./deploy/push_secrets.sh              # .env -> Secret Manager
 ./deploy/deploy.sh                    # verifies live config matches intent
-./deploy/smoke_test.sh                # 14 checks against the deployed service
+./deploy/smoke_test.sh                # 21 checks against the deployed service
 ```
 
 Data rebuild: `pipeline.py crawl parse rank verify export` then

@@ -81,7 +81,7 @@ Farheen's real risk is not missing a scholarship. It is **being told she
 qualifies for one she doesn't** — collecting documents, spending money on
 photocopies and a trip to a cyber café, and being rejected.
 
-So the bot never guesses. 144 of 219 records have no readable income ceiling
+So the bot never guesses. 152 of 298 records have no readable income ceiling
 because the government PDFs don't legibly state one. For those it says
 **"income limit not stated by the source — check the official page"** rather than
 assuming.

@@ -45,6 +45,23 @@ deliverables/dataset/*
 # They stay on disk; they do not go into a public repository.
 Documents/
 
+# ── A different project that happens to live in this folder ─────────────
+# barfi-site/ is the bebarfi.com website: 7.6 MB, its own build, no shared
+# code with the bot. It belongs in its own repository. Ignored here so that
+# `git add -A` cannot sweep it — and the personal CV inside it — into a
+# PUBLIC repo, which is exactly what happened once.
+barfi-site/
+
+# ── Personal documents, wherever they turn up ───────────────────────────
+# Defence in depth. The rules above depend on a file staying in the folder
+# someone first put it in; these do not. A CV in a public repo is not a
+# mistake you can take back, because the clone already happened.
+*[Rr]esume*.pdf
+*[Cc][Vv].pdf
+*.docx
+*.pptx
+*.xlsx
+
 # ── Local tool settings ─────────────────────────────────────────────────
 .claude/
 

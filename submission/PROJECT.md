@@ -49,14 +49,14 @@ Happy to add a specific number to the WhatsApp allowlist on request.
 
 | | |
 |---|---|
-| Scholarships served | **219** (251 crawled, 32 withheld by a quality gate) |
+| Scholarships served | **298** (209 of them awaiting re-verification, flagged `needs_review`) |
 | Rajasthan-specific | **22**, with Hindi names |
 | States represented | **30** |
 | With a verified income ceiling | 75 |
 | With a deadline | 139 |
 | Re-checked against the official source | 68 |
 | Domains robots-checked before crawling | **70** |
-| Automated tests | **138** + a 21-check live smoke test |
+| Automated tests | **224** + a 21-check live smoke test |
 
 ---
 
@@ -105,7 +105,7 @@ cp .env.example .env
 
 **Run the tests:**
 ```bash
-./.venv/bin/python -m pytest tests/ bot/tests/ -q      # 102 tests
+./.venv/bin/python -m pytest tests/ bot/tests/ -q      # 224 tests
 ```
 
 **Rebuild the data from scratch** (needs Playwright, ~20 min, polite crawler):
@@ -121,7 +121,7 @@ cp .env.example .env
 ./deploy/setup_secrets.sh     # guided, generates the random secrets for you
 ./deploy/push_secrets.sh      # into Google Secret Manager
 ./deploy/deploy.sh            # Cloud Run
-./deploy/smoke_test.sh        # 14 checks against the live service
+./deploy/smoke_test.sh        # 21 checks against the live service
 ```
 
 ---

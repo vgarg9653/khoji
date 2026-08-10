@@ -75,7 +75,7 @@ one PDF covering 3 schemes   →  a university scholarship labelled "class 9–1
 > So eligibility never touches the AI. It's deterministic rules over government
 > PDFs. The AI reads Hindi and explains results — it is not allowed near a fact.
 >
-> Twelve failures like this, each one now a regression test. 138 tests."
+> Twelve failures like this, each one now a regression test. 224 tests."
 
 ---
 
@@ -94,7 +94,7 @@ one PDF covering 3 schemes   →  a university scholarship labelled "class 9–1
 
 ## 2:45–3:00 · Where it goes
 
-> "Live on WhatsApp Cloud API and on the web. 219 verified scholarships, 22
+> "Live on WhatsApp Cloud API and on the web. 298 scholarships, 22
 > specific to Rajasthan. Runs at zero rupees.
 >
 > Next: Farheen's own district, more states, and the mentor relay for the cases
