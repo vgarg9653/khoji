@@ -64,6 +64,38 @@ def greet_by_name(name: str | None, lang: str = "en") -> str:
             "hinglish": f"Namaste {name} 🙏"}.get(lang, f"Namaste, {name} 🙏")
 
 
+def ask_continue_or_restart(name: str | None, lang: str = "en") -> str:
+    """Shared family phone: is this the same person, or someone new?
+
+    Pre-translated rather than routed through the model, because it lands in the
+    middle of a conversation someone is already having and a quota failure here
+    would either wipe their answers or strand them.
+    """
+    who = name or None
+    if lang == "hi":
+        head = (f"नमस्ते! क्या यह {who} की ही खोज है?" if who
+                else "नमस्ते! क्या हम वहीं से आगे बढ़ें?")
+        return (f"{head}\n\n1. हाँ, आगे बढ़ें\n2. नई खोज शुरू करें\n\n"
+                "_नई खोज पिछले जवाब हटा देगी।_")
+    if lang == "hinglish":
+        head = (f"Namaste! Kya yeh {who} ki hi search hai?" if who
+                else "Namaste! Kya hum wahin se aage badhein?")
+        return (f"{head}\n\n1. Haan, aage badhein\n2. Nayi search shuru karein\n\n"
+                "_Nayi search pichhle jawab hata degi._")
+    head = (f"Welcome back! Is this still {who}?" if who
+            else "Welcome back! Shall we carry on where we left off?")
+    return (f"{head}\n\n1. Yes, carry on\n2. Start a new search\n\n"
+            "_A new search clears the previous answers._")
+
+
+def resumed(name: str | None, lang: str = "en") -> str:
+    if lang == "hi":
+        return f"ठीक है{f', {name}' if name else ''} — जहाँ छोड़ा था वहीं से:"
+    if lang == "hinglish":
+        return f"Theek hai{f', {name}' if name else ''} — wahin se aage:"
+    return f"Carrying on{f', {name}' if name else ''} —"
+
+
 def ask_state() -> str:
     # 36 states is too many to list on a phone; ask them to type it.
     return ("*1 of 4* — Which state or UT do you live in?\n\n"
@@ -90,7 +122,13 @@ def ask_level(lang: str = "en") -> str:
 
 
 def ask_class_level() -> str:
-    return ("Which class are you in? Reply with a number from *1* to *12*.\n\n"
+    # Numbered as part of step 2, not as a step of its own. It is only asked of
+    # school students, so counting it separately made the count a lie for
+    # exactly the students who get it: they were told "4 of 4" and then had two
+    # more questions to answer. A progress indicator that overshoots is worse
+    # than none — it is the point in the flow where people give up.
+    return ("*2 of 4* — Which class are you in? Reply with a number "
+            "from *1* to *12*.\n\n"
             "(Type *skip* if you'd rather not say)")
 
 
@@ -124,11 +162,11 @@ ASPIRATION_COPY = {
            "don't. Type *skip* and I'll just show what fits you today."),
     "hi": ("आख़िरी बात, और यह ज़रूरी नहीं — इसके बाद आप क्या करना चाहेंगे?",
            "अभी न पता हो तो बिल्कुल ठीक है — ज़्यादातर लोगों को नहीं पता होता। "
-           "*skip* लिखिए, मैं वही दिखाऊँगा जो आज आप पर लागू होता है।"),
+           "*छोड़ो* लिखिए, मैं वही दिखाऊँगा जो आज आप पर लागू होता है।"),
     "hinglish": ("Aakhri baat, aur yeh zaroori nahi — iske baad aap kya karna "
                  "chahenge?",
                  "Abhi pata na ho to bilkul theek hai — zyadatar logon ko nahi "
-                 "pata hota. *skip* likhiye, main wahi dikhaunga jo aaj aap par "
+                 "pata hota. *chodo* likhiye, main wahi dikhaunga jo aaj aap par "
                  "lagu hota hai."),
 }
 

@@ -20,7 +20,7 @@ HINGLISH: dict[str, str] = {
     "What should I call you?\n\n"
     "(Type *skip* if you'd rather not say)":
         "Main aapko kya kehkar bulaun?\n\n"
-        "(Nahi batana chahte to *skip* likhiye)",
+        "(Nahi batana chahte to *chodo* likhiye)",
 
     # ---- the questions --------------------------------------------------
     "*1 of 4* — Which state or UT do you live in?\n\n"
@@ -28,10 +28,11 @@ HINGLISH: dict[str, str] = {
         "*1 / 4* — Aap kis state me rehte hain?\n\n"
         "Bas naam likh dijiye, jaise: _Bihar_ ya _Rajasthan_",
 
-    "Which class are you in? Reply with a number from *1* to *12*.\n\n"
+    "*2 of 4* — Which class are you in? Reply with a number "
+    "from *1* to *12*.\n\n"
     "(Type *skip* if you'd rather not say)":
-        "Aap kis class me hain? *1* se *12* tak koi number bhejiye.\n\n"
-        "(Nahi batana chahte to *skip* likhiye)",
+        "*2 / 4* — Aap kis class me hain? *1* se *12* tak koi number bhejiye.\n\n"
+        "(Nahi batana chahte to *chodo* likhiye)",
 
     # ---- short forms used by the intent layer ----------------------------
     "Which state do you live in?": "Aap kis state me rehte hain?",
@@ -61,11 +62,11 @@ HINGLISH: dict[str, str] = {
         "jaise: _Uttar Pradesh_, _Rajasthan_, _Bihar_",
 
     "Please reply with a number from *1* to *12*, or type *skip*.":
-        "Kripya *1* se *12* tak koi number bhejiye, ya *skip* likhiye.",
+        "Kripya *1* se *12* tak koi number bhejiye, ya *chodo* likhiye.",
 
     "I couldn't read that amount. Try _2 lakh_ or _250000_, or type *skip*.":
         "Mujhe wo amount samajh nahi aaya. _2 lakh_ ya _250000_ likhiye, "
-        "ya *skip*.",
+        "ya *pata nahi*.",
 
     "Reply with a result *number* for details, or type *restart* to search again.":
         "Kisi result ka *number* bhejiye details ke liye, ya dobara khojne ke "
@@ -114,7 +115,7 @@ ASK_CATEGORY_FOOTER = (
 ASK_INCOME = (
     "*4 / 4* — Aapke ghar ki *saalana* aay kitni hai?\n\n"
     "Aap likh sakte hain: _2 lakh_ ya _250000_ ya _50k_\n\n"
-    "Pata na ho to *skip* likhiye — main phir bhi scholarships dikhaunga, "
+    "Pata na ho to *pata nahi* likhiye — main phir bhi scholarships dikhaunga, "
     "par unki income limit aapko khud dekhni hogi.")
 
 RESULTS = {

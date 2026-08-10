@@ -111,6 +111,9 @@ class Session:
     clarify_streak: int = 0
     # A one-line profile summary awaiting a yes/no before we run matching.
     pending_confirm: bool = False
+    # Someone said "hi" on top of an answered profile — these phones are shared,
+    # so we ask whether to keep it rather than wiping a sibling's answers.
+    pending_restart: bool = False
     # True once any field was filled by inference — a voice note, or a whole
     # sentence read in one go — rather than by answering the question we asked.
     # Inferred profiles get read back before anything is matched on them.

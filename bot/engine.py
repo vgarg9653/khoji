@@ -91,8 +91,27 @@ def _match_state(text: str) -> str | None:
     return hits[0] if len(hits) == 1 else None
 
 
-_SKIPPABLE = {Step.NAME, Step.CLASS_LEVEL, Step.CATEGORY, Step.INCOME,
-              Step.ASPIRATION}
+# Steps that `_skip_current` knows how to move on from. NAME is skippable too,
+# but it is deliberately NOT here: its own handler below already treats
+# Intent.SKIP as "no name given" and then greets and moves to STATE. Routing it
+# through `_skip_current` instead hit that function's fallback, which re-asks
+# the current question — so "skip" at a prompt that literally says
+# "(Type *skip* if you'd rather not say)" re-asked the name forever.
+_SKIPPABLE = {Step.CLASS_LEVEL, Step.CATEGORY, Step.INCOME, Step.ASPIRATION}
+
+# "restart" means it; "hi" does not. `wants_restart` deliberately treats both as
+# a reset because for a first-time sender they are the same thing — this splits
+# out the half that is unambiguous, so only the greeting half has to ask.
+_EXPLICIT_RESTART = re.compile(
+    r"^\s*(?:restart|start over|reset|start again|begin again|from start|"
+    r"फिर से|दोबारा|शुरू|phir se|dobara|shuru)\s*[.!]?\s*$", re.I)
+
+# Answering the "continue or start fresh?" question. Anything that is not
+# clearly a request for a fresh start keeps the existing profile: discarding six
+# answered questions is the expensive mistake, re-asking one is the cheap one.
+_WANTS_FRESH = re.compile(
+    r"^\s*(?:2|new|fresh|new search|start fresh|restart|someone else|"
+    r"नया|नई|नई खोज|कोई और|फिर से|naya|nayi|koi aur)\s*[.!]?\s*$", re.I)
 
 _AFFIRMATIVE = re.compile(
     r"^\s*(?:y|yes|yeah|yep|ok|okay|correct|right|sahi|sahi hai|haan|han|ha|"
@@ -247,6 +266,17 @@ class Bot:
             session.language = detected
             self.store.save(session)
 
+        # Someone greeted us on top of an existing profile and we asked whether
+        # to keep it. Settle that before anything else reads the message.
+        if session.pending_restart:
+            session.pending_restart = False
+            if _WANTS_FRESH.match(text or ""):
+                return self._do_restart(phone, session.language)
+            self.store.save(session)
+            return self._out(session, [
+                M.resumed(session.profile.name, session.language),
+                _question_for(session.step)])
+
         # We read a profile back and asked whether it was right. Nothing else
         # happens until that is settled.
         if session.pending_confirm:
@@ -327,16 +357,28 @@ class Bot:
             msgs = ([note] if note else []) + self._show_results(session)
             return self._out(session, msgs)
 
-        if what is Intent.RESTART or wants_restart(text) or session.step is Step.WELCOME:
-            lang = session.language
-            session = self.store.reset(phone)
-            session.step = Step.NAME
-            # A student who opened in Hindi should not be reset to English.
-            session.language = lang
-            self.store.save(session)
-            # The welcome is bilingual on purpose and goes out untranslated;
-            # only the question after it is rendered in their language.
-            return [M.welcome()] + self._out(session, [M.ask_name()])
+        # Intent.GREETING is in here, not just `wants_restart`, because that
+        # helper is a literal word list: "namaste" was in it and "नमस्ते" was
+        # not, so the Devanagari greeting fell through to the slot parser and
+        # came back as "I couldn't read that amount" — in a Hindi conversation.
+        # The intent layer already recognises greetings in every script we take.
+        if (what in (Intent.RESTART, Intent.GREETING) or wants_restart(text)
+                or session.step is Step.WELCOME):
+            # One phone is one session, and these households share phones. A
+            # sibling or parent opening with "hi" was silently wiping a profile
+            # someone had just spent six questions building — and "hi" is not a
+            # request to start over, it is how people open a chat. So a GREETING
+            # on top of real answers asks first; an explicit "restart" still
+            # resets immediately, because that one is unambiguous.
+            explicit = what is Intent.RESTART or _EXPLICIT_RESTART.match(text or "")
+            if (not explicit and session.step not in (Step.WELCOME, Step.NAME)
+                    and session.profile.known_fields()):
+                session.pending_restart = True
+                self.store.save(session)
+                return self._out(session, [
+                    M.ask_continue_or_restart(session.profile.name,
+                                              session.language)])
+            return self._do_restart(phone, session.language)
 
         if session.step is Step.NAME:
             # Plenty of people ignore the question and answer the one they came
@@ -636,6 +678,18 @@ class Bot:
                 "Good question — I'll be able to answer that once I've found "
                 "your scholarships.\n\n" + _question_for(session.step)])
         return self._out(session, [answer, _question_for(session.step)])
+
+    def _do_restart(self, phone: str, lang: str) -> list[str]:
+        """Wipe and start over. The one place that clears a profile, so there is
+        no second route that forgets to preserve the language."""
+        session = self.store.reset(phone)
+        session.step = Step.NAME
+        # A student who opened in Hindi should not be reset to English.
+        session.language = lang
+        self.store.save(session)
+        # The welcome is bilingual on purpose and goes out untranslated; only
+        # the question after it is rendered in their language.
+        return [M.welcome()] + self._out(session, [M.ask_name()])
 
     def _skip_current(self, session: Session) -> list[str]:
         """Accept a refusal and move on. Refusing to answer is a legitimate

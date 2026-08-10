@@ -25,7 +25,7 @@ HI: dict[str, str] = {
     "What should I call you?\n\n"
     "(Type *skip* if you'd rather not say)":
         "मैं आपको क्या कहकर बुलाऊँ?\n\n"
-        "(न बताना चाहें तो *skip* लिखें)",
+        "(न बताना चाहें तो *छोड़ो* लिखें)",
 
     # ---- the four questions --------------------------------------------
     "*1 of 4* — Which state or UT do you live in?\n\n"
@@ -33,10 +33,11 @@ HI: dict[str, str] = {
         "*1 / 4* — आप किस राज्य में रहते हैं?\n\n"
         "बस नाम लिखिए, जैसे: _बिहार_ या _राजस्थान_",
 
-    "Which class are you in? Reply with a number from *1* to *12*.\n\n"
+    "*2 of 4* — Which class are you in? Reply with a number "
+    "from *1* to *12*.\n\n"
     "(Type *skip* if you'd rather not say)":
-        "आप किस कक्षा में हैं? *1* से *12* तक कोई नंबर भेजिए।\n\n"
-        "(न बताना चाहें तो *skip* लिखें)",
+        "*2 / 4* — आप किस कक्षा में हैं? *1* से *12* तक कोई नंबर भेजिए।\n\n"
+        "(न बताना चाहें तो *छोड़ो* लिखें)",
 
     # ---- short questions used by the intent layer -----------------------
     "Which state do you live in?": "आप किस राज्य में रहते हैं?",
@@ -64,10 +65,10 @@ HI: dict[str, str] = {
         "जैसे: _उत्तर प्रदेश_, _राजस्थान_, _बिहार_",
 
     "Please reply with a number from *1* to *12*, or type *skip*.":
-        "कृपया *1* से *12* तक कोई नंबर भेजिए, या *skip* लिखें।",
+        "कृपया *1* से *12* तक कोई नंबर भेजिए, या *छोड़ो* लिखें।",
 
     "I couldn't read that amount. Try _2 lakh_ or _250000_, or type *skip*.":
-        "मुझे वह राशि समझ नहीं आई। _2 लाख_ या _250000_ लिखिए, या *skip*।",
+        "मुझे वह राशि समझ नहीं आई। _2 लाख_ या _250000_ लिखिए, या *पता नहीं*।",
 
     "Reply with a result *number* for details, or type *restart* to search again.":
         "किसी नतीजे का *नंबर* भेजिए विवरण के लिए, या फिर से खोजने के लिए *restart*।",
@@ -239,7 +240,7 @@ ASK_CATEGORY_HI_FOOTER = (
 ASK_INCOME_HI = (
     "*4 / 4* — आपके परिवार की *सालाना* आय कितनी है?\n\n"
     "आप लिख सकते हैं: _2 लाख_ या _250000_ या _50k_\n\n"
-    "अगर पता न हो तो *skip* लिखें — मैं फिर भी छात्रवृत्तियाँ दिखाऊँगा, "
+    "अगर पता न हो तो *पता नहीं* लिखें — मैं फिर भी छात्रवृत्तियाँ दिखाऊँगा, "
     "पर आपको उनकी आय-सीमा खुद देखनी होगी।")
 
 

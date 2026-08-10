@@ -1,13 +1,22 @@
 # Khoji.AI
 
-**A free WhatsApp assistant that helps students in India find scholarships they
-actually qualify for — in their own language.**
+**Khoji.AI (previously EduDisha / ScholarSaathi) is a free, multilingual
+WhatsApp assistant bringing financing and exposure to underserved
+students in India. Built by Barfi Institute.
+
+The two barriers it addresses:
+- FINANCING — students who qualify for scholarships never find them,
+  don't understand eligibility, or stall before applying.
+- EXPOSURE — students can't aim at paths they've never seen, and have
+  no one to ask about what comes next.
+
+V1 addresses financing: verified scholarship discovery, eligibility
+explanation, and guidance to official applications, with a three-mentor
+relay for stuck cases. V2 (course-fit guidance) and V3 (mentor matching)
+address exposure.**
 
 Built by [Barfi Institute](https://www.bebarfi.com). Always free for students.
 
-There is money set aside for these students. In 2023–26, ₹3,400 crore of
-minority scholarship budget went **unspent** while students dropped out for want
-of fees. The money exists. Finding it does not. That is the problem this solves.
 
 ---
 
@@ -52,11 +61,11 @@ file. The bot serves that file. The bot never crawls anything.
 |---|---|
 | **`bot/`** | The conversation. Reads a message, decides what it means, matches it against the catalogue, writes a reply. Runs on Google Cloud Run. |
 | **`src/`** | The pipeline that builds the catalogue. Crawlers, PDF readers, the eligibility extractor, the quality gate. Never deployed. |
-| **`deliverables/dataset/`** | **`bot_matching.json`** — the 219 scholarships the bot serves. Open it; it is readable. |
+| **`deliverables/dataset/`** | **`bot_matching.json`** — the 298 scholarships the bot serves. Open it; it is readable. |
 | **`deliverables/compliance/`** | Proof of how we crawled: every domain's robots.txt policy, and every URL we refused to fetch. |
 | **`deploy/`** | Shell scripts that put it live and check it stayed live. Start with `deploy/check.sh`. |
 | **`docs/`** | [Setup](docs/SETUP.md) · [Deploying](docs/DEPLOY.md) · [Current state](docs/STATE.md) · [Principles](docs/PRINCIPLES.md) · [Data dictionary](docs/dataset/DATA_DICTIONARY.md) |
-| **`tests/`, `bot/tests/`** | 138 tests. Nearly every one exists because something specific broke once. |
+| **`tests/`, `bot/tests/`** | 224 tests. Nearly every one exists because something specific broke once. |
 | **`tools/`** | Two dev tools: benchmark language models, and check whether a new source needs a browser. |
 | **`data/`** | Pipeline working files. Not in the repo — ~400 MB, and fully reproducible. |
 
@@ -109,7 +118,7 @@ the model adds reach, it is not load-bearing.
 **There are two clocks, and almost every confusion comes from merging them.**
 
 **Build time** runs on your laptop when you choose. It crawls, reads PDFs,
-extracts eligibility, verifies against the source, and writes one 945 KB file.
+extracts eligibility, verifies against the source, and writes one 1.3 MB file.
 Takes about three minutes. Needs a browser and OCR. Costs nothing.
 
 ```bash
@@ -119,7 +128,7 @@ python src/make_deliverables.py
 
 **Run time** runs on Cloud Run, once per message, in about a second. It loads
 that file into memory at startup and never touches a database for scholarships —
-219 records fit comfortably in RAM, and a loop over a list beats a query.
+298 records fit comfortably in RAM, and a loop over a list beats a query.
 
 Firestore stores one thing: conversations in progress, keyed by a salted hash of
 the phone number, deleted after 48 hours. The database never holds a number
@@ -154,8 +163,10 @@ never log in, never bypass a paywall, cache everything so we never re-fetch.
 redirects to hosts we had not vetted. The evidence is in
 [`deliverables/compliance/`](deliverables/compliance/), not just this paragraph.
 
-Buddy4Study has the best scholarship index in India. We took names from their
-sitemap and **nothing else** — every fact comes from the government's own page.
+Sources are the government portals plus Buddy4Study's public index, all crawled
+under the same robots policy. Each record carries the date it was last checked
+against its official page, and a `needs_review` flag where that check is still
+outstanding — the bot ranks unreviewed records below verified ones.
 
 ---
 
@@ -164,10 +175,14 @@ sitemap and **nothing else** — every fact comes from the government's own page
 Stated plainly, because the whole product is built on refusing to claim things
 the source did not say.
 
-- **144 of 219 records have no income ceiling.** The government PDFs do not
-  legibly publish one. The bot says so rather than guessing.
-- **Private scholarships are effectively absent.** 9 of 219, and most of those
-  are page fragments rather than real schemes. This is a *government* catalogue.
+- **152 of 298 records have no income ceiling.** The sources do not legibly
+  publish one. The bot says so rather than guessing.
+- **209 of 298 records are not yet verified against their official page.** They
+  came from the August discovery pass and are flagged `needs_review` in the
+  data. The matcher ranks them below verified records; that is a mitigation,
+  not a fix.
+- **Private scholarships used to be absent and no longer are** — 9 records
+  became 50. That is the newest part of the catalogue and the least checked.
 - **The largest states are missing.** Bihar, Madhya Pradesh, Tamil Nadu, Andhra
   Pradesh, Odisha and Jharkhand have zero state-specific schemes, because large
   states run their own portals and we have crawled exactly one (Rajasthan → 22).

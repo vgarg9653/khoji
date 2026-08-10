@@ -52,7 +52,7 @@ ORG_ONLY = re.compile(
 #
 # The generic crawler reads arbitrary provider pages and has no such guarantee,
 # so its records must look like schemes.
-SCHEME_REGISTRY_SOURCES = {"NSP", "rajasthan"}
+SCHEME_REGISTRY_SOURCES = {"NSP", "rajasthan", "Buddy4Study"}
 
 
 def assess(rec: dict) -> tuple[bool, str | None]:

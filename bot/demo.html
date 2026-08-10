@@ -96,12 +96,10 @@
 
   <div id="log"></div>
 
-  <div class="chips" id="chips">
-    <button data-send="hi">hi</button>
-    <button data-send="Rajasthan">Rajasthan</button>
-    <button data-send="मैं राजस्थान से हूँ, कक्षा 12">Hindi</button>
-    <button data-send="restart">restart</button>
-  </div>
+  <!-- Filled from each reply's `suggestions`. Deliberately empty in the markup:
+       a hardcoded row offered "Rajasthan" while the bot was asking for a class,
+       and "hi" — which restarts — while it was asking for a category. -->
+  <div class="chips" id="chips"></div>
 
   <form id="f" autocomplete="off">
     <input id="q" placeholder="Type a message" autofocus>
@@ -156,12 +154,30 @@ function typing(){
   return d;
 }
 
+const chips = document.getElementById("chips");
+
+// The server decides what is worth offering, because only it knows which
+// question was just asked. See bot/suggestions.py.
+function showChips(list){
+  chips.textContent = "";
+  for (const s of (list || [])) {
+    if (!s || !s.send) continue;
+    const b = document.createElement("button");
+    b.textContent = s.label || s.send;   // textContent, so a label is never markup
+    b.dataset.send = s.send;
+    chips.appendChild(b);
+  }
+}
+
 async function send(text){
   if (!text.trim()) return;
   bubble(text, "me");
   input.value = "";
   sendBtn.disabled = true;
   status.textContent = "typing…";
+  // Hide the old row immediately: chips that answer the previous question are
+  // exactly the problem this replaced.
+  showChips([]);
   const dots = typing();
 
   try {
@@ -178,6 +194,7 @@ async function send(text){
       await new Promise(res => setTimeout(res, i === 0 ? 120 : 420));
       bubble(msg, "bot");
     }
+    showChips(data.suggestions);
   } catch (e) {
     dots.remove();
     bubble("Couldn't reach the server. Check your connection and try again.", "bot");
@@ -189,7 +206,7 @@ async function send(text){
 }
 
 form.addEventListener("submit", e => { e.preventDefault(); send(input.value); });
-document.getElementById("chips").addEventListener("click", e => {
+chips.addEventListener("click", e => {
   const b = e.target.closest("button[data-send]");
   if (b) send(b.dataset.send);
 });

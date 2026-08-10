@@ -40,6 +40,7 @@ from fastapi import FastAPI, Form, Request, Response, HTTPException  # noqa: E40
 from fastapi.responses import (HTMLResponse, JSONResponse,           # noqa: E402
                                PlainTextResponse)
 
+import suggestions                               # noqa: E402
 from engine import Bot                           # noqa: E402
 from matching import Matcher                     # noqa: E402
 
@@ -194,10 +195,17 @@ def _meta_extract(payload: dict) -> list[dict]:
                     out.append({"phone": phone, "kind": "audio", "text": "",
                                 "media_id": (msg.get(mtype) or {}).get("id")})
                 elif mtype == "interactive":
+                    # The id, not the title. We set the id to the text the
+                    # engine parses and the title to what the student reads, and
+                    # they are deliberately different where a number is matched
+                    # more reliably than a word — tapping "School" has to arrive
+                    # as "1". Title stays as the fallback for anything sent by
+                    # an older build whose ids were not set.
                     i = msg.get("interactive") or {}
                     reply = i.get("button_reply") or i.get("list_reply") or {}
                     out.append({"phone": phone, "kind": "text",
-                                "text": reply.get("title", ""), "media_id": None})
+                                "text": reply.get("id") or reply.get("title", ""),
+                                "media_id": None})
                 else:
                     out.append({"phone": phone, "kind": mtype or "unknown",
                                 "text": "", "media_id": None})
@@ -233,20 +241,107 @@ async def _meta_fetch_media(media_id: str) -> tuple[bytes, str] | None:
         return None
 
 
-async def _meta_send(phone: str, text: str) -> None:
+async def _meta_send(phone: str, text: str, chips: list[dict] | None = None) -> None:
+    """Send one message, as tappable options when we have them.
+
+    Typing is the barrier this product exists to remove. A student who can only
+    reply by typing "documents" — an English word, spelled correctly, on a
+    keyboard they may not have set to the right script — is being asked for more
+    literacy than reading the answer required. The web demo already offers taps;
+    this brings the same thing to the channel students actually use.
+
+    Falls back to plain text whenever the options do not fit WhatsApp's limits
+    or the interactive send is rejected, because a message that arrives with no
+    buttons is a minor loss and a message that does not arrive is the product
+    failing.
+    """
     token = os.environ.get("META_ACCESS_TOKEN")
     number_id = os.environ.get("META_PHONE_NUMBER_ID")
     if not (token and number_id):
         log.warning("META_ACCESS_TOKEN / META_PHONE_NUMBER_ID unset - not sending")
         return
     url = f"https://graph.facebook.com/v21.0/{number_id}/messages"
-    body = {"messaging_product": "whatsapp", "to": phone,
-            "type": "text", "text": {"preview_url": False, "body": text}}
+    headers = {"Authorization": f"Bearer {token}"}
+    plain = {"messaging_product": "whatsapp", "to": phone,
+             "type": "text", "text": {"preview_url": False, "body": text}}
+
+    body = _meta_interactive(phone, text, chips) or plain
     async with httpx.AsyncClient(timeout=20) as client:
-        r = await client.post(url, json=body,
-                              headers={"Authorization": f"Bearer {token}"})
+        r = await client.post(url, json=body, headers=headers)
+        if r.status_code >= 400 and body is not plain:
+            # Interactive has more ways to be rejected than text does (a limit
+            # we mis-measured, a policy on the number). Never let that cost the
+            # student the message itself.
+            log.warning("meta interactive send failed %s: %s - retrying as text",
+                        r.status_code, r.text[:200])
+            r = await client.post(url, json=plain, headers=headers)
         if r.status_code >= 400:
             log.error("meta send failed %s: %s", r.status_code, r.text[:300])
+
+
+# WhatsApp's documented ceilings. Exceeding any one of them rejects the whole
+# message, so they are enforced here rather than hoped for.
+_BODY_MAX = 1024
+_BUTTON_TITLE_MAX = 20
+_ROW_TITLE_MAX = 24
+_MAX_BUTTONS = 3
+_MAX_ROWS = 10
+
+
+def _meta_interactive(phone: str, text: str, chips: list[dict] | None) -> dict | None:
+    """Build a button or list payload, or None if plain text is the right call.
+
+    Three buttons or fewer render inline, which is one tap. More than that has
+    to be a list, which costs a tap to open — so the split is by count, not by
+    preference.
+    """
+    if not chips or len(text) > _BODY_MAX:
+        return None
+    rows = [c for c in chips if c.get("send") and c.get("label")][:_MAX_ROWS]
+    if not rows:
+        return None
+
+    base = {"messaging_product": "whatsapp", "to": phone, "type": "interactive"}
+
+    if len(rows) <= _MAX_BUTTONS:
+        if any(len(c["label"]) > _BUTTON_TITLE_MAX for c in rows):
+            return None          # a truncated label can change what it means
+        return base | {"interactive": {
+            "type": "button",
+            "body": {"text": text},
+            "action": {"buttons": [
+                {"type": "reply",
+                 "reply": {"id": c["send"][:256], "title": c["label"]}}
+                for c in rows]}}}
+
+    if any(len(c["label"]) > _ROW_TITLE_MAX for c in rows):
+        return None
+    return base | {"interactive": {
+        "type": "list",
+        "body": {"text": text},
+        "action": {"button": "Choose",
+                   "sections": [{"rows": [
+                       {"id": c["send"][:200], "title": c["label"]}
+                       for c in rows]}]}}}
+
+
+async def _send_batch(bot, phone: str, replies: list[str]) -> None:
+    """Send a turn's replies, with the options attached to the last one.
+
+    Only the last: the options answer the question the student has just been
+    asked, and that question is always in the final message. Buttons on an
+    earlier one would be answering something they have not read yet.
+    """
+    replies = list(replies)
+    if not replies:
+        return
+    try:
+        chips = suggestions.for_session(bot.store.get(phone))
+    except Exception:
+        chips = None                     # never lose a reply over a chip
+    for reply in replies[:-1]:
+        await _meta_send(phone, reply)
+    await _meta_send(phone, replies[-1], chips)
 
 
 @app.post("/webhook/meta")
@@ -262,16 +357,14 @@ async def meta_webhook(request: Request) -> JSONResponse:
                 await _meta_send(phone, VOICE_UNAVAILABLE)
                 continue
             audio, mime = media
-            for reply in bot.handle_voice(phone, audio, mime):
-                await _meta_send(phone, reply)
+            await _send_batch(bot, phone, bot.handle_voice(phone, audio, mime))
             continue
 
         if kind != "text" or not msg["text"]:
             await _meta_send(phone, UNSUPPORTED_MESSAGE)
             continue
 
-        for reply in bot.handle(phone, msg["text"]):
-            await _meta_send(phone, reply)
+        await _send_batch(bot, phone, bot.handle(phone, msg["text"]))
     # Meta retries aggressively on non-200, which would double-send replies.
     return JSONResponse({"status": "ok"})
 
@@ -301,4 +394,14 @@ async def test_webhook(request: Request) -> JSONResponse:
     payload = await request.json()
     phone = payload.get("phone", "+910000000000")
     text = payload.get("text", "")
-    return JSONResponse({"phone": phone, "replies": get_bot().handle(phone, text)})
+    bot = get_bot()
+    replies = bot.handle(phone, text)
+    # Quick-reply chips for the demo page. Read AFTER handling, so they describe
+    # the question the student is now looking at rather than the one they just
+    # answered. WhatsApp gets no equivalent — it has its own reply UI — so this
+    # stays on the test endpoint only.
+    return JSONResponse({
+        "phone": phone,
+        "replies": replies,
+        "suggestions": suggestions.for_session(bot.store.get(phone)),
+    })

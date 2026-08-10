@@ -17,7 +17,7 @@ carry the old name — see "Open items".
 | Meta app | **still named `EduDisha`** (id `1017501961097775`) · WABA `3918211888485437` · phone id `1346817201841648` |
 | WhatsApp profile | renamed to Khoji.AI (about/description/site/category) — display name stuck at *Test Number*, see below |
 | Models | router/generation/audio `gemini-3.5-flash-lite`, fallback `gemini-3.1-flash-lite` — see `bot/models.py`. `/health` prints the live chains. |
-| Tests | 138 (`pytest tests/ bot/tests/ -q`) + `deploy/smoke_test.sh` (21 live checks) |
+| Tests | 224 (`pytest tests/ bot/tests/ -q`) + `deploy/smoke_test.sh` (21 live checks) |
 
 Live and current as of 10 Aug 2026: revision `edudisha-00013-qxw`, all 21
 `smoke_test.sh` checks passing against the deployed service.
@@ -26,8 +26,26 @@ Live and current as of 10 Aug 2026: revision `edudisha-00013-qxw`, all 21
 
 ## Data
 
-219 served (251 crawled, 32 withheld by the quality gate) · 22 Rajasthan-specific ·
-30 states · 75 with income ceiling · 139 with deadline · 68 re-verified.
+**298 served** (was 219), after a Buddy4Study discovery pass merged in on
+10 Aug 2026 via `tools/build_comprehensive_catalogue.py`.
+
+| | before | now |
+|---|---|---|
+| served | 219 | **298** |
+| with income ceiling | 75 (34%) | **146 (48%)** |
+| with deadline | 139 (63%) | **215 (72%)** |
+| private + NGO | 9 | **50** |
+| re-verified against source | 68 (31%) | 68 (**22%**) |
+| `needs_review` | — | **209 (70%)** |
+
+Read the last two rows together with the first: the catalogue grew by 36% and
+the *verified* count did not move, so the verified share fell. The new records
+carry `needs_review: true` and `confidence: medium`, and `matching.py` already
+ranks on both — but `pipeline.py verify` has not been re-run over them. That is
+now the highest-value data job, ahead of adding more records.
+
+The private/NGO gap is genuinely closed (9 → 50). The big-state gap is not:
+still one state portal crawled (Rajasthan).
 
 ## What the catalogue actually covers (measured 10 Aug 2026)
 
@@ -43,13 +61,13 @@ no pagination: central sector 31, centrally sponsored 105, state schemes 32 →
    Puducherry 11, Uttarakhand 11) are the small ones — precisely because small
    states publish *through* NSP while large states run their own portals. We
    crawled exactly one of those portals (Rajasthan → 22 schemes).
-2. **Private is effectively zero.** 5 "private" + 4 "ngo" records, and most are
-   page artifacts scraped off provider websites — "Our Scholars 2025-26",
-   "The Scholarship". Perhaps two are real. `data/interim/b4s_names.json` holds
-   **1,205 discovered names we have never crawled**, ~63 clearly corporate/CSR.
+2. ~~**Private is effectively zero.**~~ **Closed 10 Aug 2026.** Was 5 "private"
+   + 4 "ngo", most of them page artifacts. The Buddy4Study discovery pass took
+   this to **46 private + 4 ngo**. `data/interim/b4s_names.json` still holds
+   ~1,000 discovered names never crawled.
 
-Field completeness on the 219 served: income ceiling 34%, deadline 63%,
-documents 63%, amount 22%, marks cutoff 2%, re-verified 31%.
+Field completeness on the 298 served: income ceiling 48%, deadline 72%,
+`stream_tags` 13%, re-verified 22%, `needs_review` 70%.
 
 ## Repo layout (restructured 10 Aug 2026)
 
@@ -116,7 +134,7 @@ Measured on this key, 10 Aug 2026 (`scratchpad/bench.py`):
 | `gemma-4-31b-it` | 5/5 | ~13.6s | correct, far too slow for WhatsApp |
 
 Embeddings (`gemini-embedding-2`) exist on this key and are deliberately unused:
-219 records matched by deterministic rules do not need semantic search, and it
+298 records matched by deterministic rules do not need semantic search, and it
 would add a way to be confidently wrong.
 
 ## Understanding an answer
@@ -136,6 +154,16 @@ gets used.
 
 `welcome` (bilingual, never translated) → name → state → level → class → category
 → income → aspiration (optional) → results → detail → `more` / `documents`.
+
+- **Quick replies come from `bot/suggestions.py`**, computed server-side from
+  the session. The web demo renders them as chips; Meta renders them as reply
+  buttons (≤3) or a list (4–10), falling back to plain text if the labels or
+  body exceed WhatsApp's limits. The reply *id* carries what the engine parses
+  and the *title* what the student reads — they differ where a number matches
+  more reliably than a word, so reading the title back breaks every tap.
+- **A greeting on top of an answered profile asks before wiping it.** These are
+  shared family phones; "hi" is how people open a chat, not a request to throw
+  away six answers. Explicit `restart` still resets immediately.
 
 - **Language is re-decided on every message** from script and wording — Devanagari
   → `hi`, Roman-script Hindi markers → `hinglish`, else `en`. **Never from the
@@ -168,15 +196,13 @@ Data rebuild: `pipeline.py crawl parse rank verify export` then
 
 ## Open items, in priority order
 
-1. **Rotate the Gemini key** — the current one appeared in a chat transcript.
-   `./deploy/set_key.sh GEMINI_API_KEY` → `push_secrets` → `deploy`.
-2. **Point the Meta webhook at the new service.** It still calls
+1. **Point the Meta webhook at the new service.** It still calls
    `edudisha`, which is why that service is deliberately left running. Needs an
    **app access token** (`{app-id}|{app-secret}`) or one change in the Meta
    console: WhatsApp → Configuration → Callback URL →
    `https://khoji-e5crtuobjq-el.a.run.app/webhook/meta`. Retire `edudisha`
    after that.
-3. **Old open item, kept for the record: renaming the Cloud Run service** — `SERVICE=khoji ./deploy/deploy.sh` creates a
+2. **Old open item, kept for the record: renaming the Cloud Run service** — `SERVICE=khoji ./deploy/deploy.sh` creates a
    *second* service on a *new* URL; the Meta webhook and every shared link must be
    re-pointed the same day. The GCP project id `edudisha-bot` cannot be renamed
    at all. Left as-is deliberately.
@@ -196,6 +222,22 @@ Data rebuild: `pipeline.py crawl parse rank verify export` then
    revisiting — it is the most common answer, so it may be quietly switching off
    the exposure half of the product.
 9. **Part B — the bebarfi.com rebuild** — not started.
+10. **Re-verify the 230 unverified records.** `pipeline.py verify` has not run
+    since the Buddy4Study merge, so 70% carry `needs_review: true`. Higher value
+    than adding more records.
+11. **`stream_tags` is empty on 258 of 298**, so a student who says
+    "engineering" gets much the same list as one who skips the question. The
+    tags exist in Buddy4Study prose and can be filled at build time — offline,
+    rules-only. Not a live-model job.
+12. **Twilio has no reply buttons.** Meta now sends interactive lists; the
+    Twilio adapter is still text-only, and quick replies there need content
+    templates.
+
+## Resolved
+
+- **Gemini key rotated** (10 Aug 2026). The key that appeared in a chat
+  transcript has been replaced; `/health` confirms the live service is answering
+  with `llm_ready: true`.
 
 ## Gotchas already paid for
 
