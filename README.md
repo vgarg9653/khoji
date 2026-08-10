@@ -184,7 +184,8 @@ by how many students each would reach.
 
 The code is **MIT licensed** — read it, check it, reuse it. See [LICENSE](LICENSE).
 
-The scholarship data is not code and carries no warranty: it is compiled from
-public government sources, and deadlines and rules change without notice. Always
-confirm details on a scheme's official page before applying. The bot says this
-on every result, and so do we.
+**The scholarship data is not code and the licence does not cover it.** It is
+compiled from public Indian government sources and carries no warranty of
+accuracy or currency — deadlines and eligibility rules change without notice.
+Always confirm details on a scheme's official page before applying. The bot says
+this on every result, and so do we.

@@ -44,7 +44,7 @@ gh repo create khoji-ai --public --source=. --push
 ⚠️ **Before pushing, open `.env.example` and confirm every value is blank.**
 It is a template; it must never carry a real key.
 
-Then paste the repo URL into `PROJECT.md` where it says `<repo-url>`.
+Then paste the repo URL into `PROJECT.md` where it says `https://github.com/vgarg9653/khoji`.
 
 ---
 

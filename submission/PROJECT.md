@@ -87,7 +87,7 @@ reads. A wrong "yes" costs a student an application cycle.
 ## Run it yourself in 5 minutes
 
 ```bash
-git clone <repo-url> && cd khoji-ai
+git clone https://github.com/vgarg9653/khoji && cd khoji-ai
 python3 -m venv .venv
 ./.venv/bin/pip install -r requirements-bot.txt
 ./.venv/bin/python bot/simulate.py
