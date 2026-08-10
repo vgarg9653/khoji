@@ -180,9 +180,11 @@ by how many students each would reach.
 
 ---
 
-## Licence and use
+## Licence
 
-The code is here to be read, checked and reused. The scholarship data is
-compiled from public government sources; always confirm details on a scheme's
-official page before applying — deadlines and rules change, and the bot says so
-on every result.
+The code is **MIT licensed** — read it, check it, reuse it. See [LICENSE](LICENSE).
+
+The scholarship data is not code and carries no warranty: it is compiled from
+public government sources, and deadlines and rules change without notice. Always
+confirm details on a scheme's official page before applying. The bot says this
+on every result, and so do we.
