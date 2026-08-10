@@ -16,7 +16,7 @@ G=$'\033[0;32m'; R=$'\033[0;31m'; Y=$'\033[0;33m'; B=$'\033[1m'; D=$'\033[2m'; N
 
 URL="${1:-}"
 if [[ -z "$URL" ]]; then
-  URL=$(gcloud run services describe edudisha --region "${REGION:-asia-south1}" \
+  URL=$(gcloud run services describe khoji --region "${REGION:-asia-south1}" \
         --format='value(status.url)' 2>/dev/null)
 fi
 [[ -n "$URL" ]] || { echo "${R}could not determine service URL${N}"; exit 1; }

@@ -68,7 +68,7 @@ Follow **`DEMO_SCRIPT.md`** — 3 minutes, exact lines and inputs.
 
 ```bash
 # Kill the cold start first:
-gcloud run services update edudisha --region asia-south1 --min-instances 1
+gcloud run services update khoji --region asia-south1 --min-instances 1
 ```
 
 Record the **web demo**, not WhatsApp — no allowlist, and you can retake instantly.
@@ -77,7 +77,7 @@ Upload unlisted to YouTube, put the link in the form.
 
 ```bash
 # Afterwards, back to free:
-gcloud run services update edudisha --region asia-south1 --min-instances 0
+gcloud run services update khoji --region asia-south1 --min-instances 0
 ```
 
 ---
@@ -90,7 +90,7 @@ I couldn't read the Airtable form (it needs a real browser), so map by hand:
 |---|---|
 | Project name | **Khoji.AI** |
 | One-line description | *A WhatsApp bot that helps underprivileged Indian students find scholarships they actually qualify for — in Hindi, on a shared family phone.* |
-| Live URL | `https://edudisha-e5crtuobjq-el.a.run.app/demo` |
+| Live URL | `https://khoji-e5crtuobjq-el.a.run.app/demo` |
 | Repo | your GitHub URL |
 | Demo video | your YouTube link |
 | AI workflow | paste from `AI_WORKFLOW.md` — lead with the twelve failures |

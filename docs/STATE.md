@@ -9,11 +9,11 @@ carry the old name — see "Open items".
 
 | | |
 |---|---|
-| Web demo (no limits) | `https://edudisha-e5crtuobjq-el.a.run.app/demo` |
-| Health | `https://edudisha-e5crtuobjq-el.a.run.app/health` |
+| Web demo (no limits) | `https://khoji-e5crtuobjq-el.a.run.app/demo` |
+| Health | `https://khoji-e5crtuobjq-el.a.run.app/health` |
 | WhatsApp | `+1 555-202-9853` — **Meta test number, 5 recipients max** |
 | GCP project | `edudisha-bot` (823683909408), region `asia-south1` |
-| Cloud Run service | `edudisha` |
+| Cloud Run service | `khoji` (the original `edudisha` is still up and serving the same code — see below) |
 | Meta app | **still named `EduDisha`** (id `1017501961097775`) · WABA `3918211888485437` · phone id `1346817201841648` |
 | WhatsApp profile | renamed to Khoji.AI (about/description/site/category) — display name stuck at *Test Number*, see below |
 | Models | router/generation/audio `gemini-3.5-flash-lite`, fallback `gemini-3.1-flash-lite` — see `bot/models.py`. `/health` prints the live chains. |
@@ -170,7 +170,13 @@ Data rebuild: `pipeline.py crawl parse rank verify export` then
 
 1. **Rotate the Gemini key** — the current one appeared in a chat transcript.
    `./deploy/set_key.sh GEMINI_API_KEY` → `push_secrets` → `deploy`.
-2. **Rename the Cloud Run service** — `SERVICE=khoji ./deploy/deploy.sh` creates a
+2. **Point the Meta webhook at the new service.** It still calls
+   `edudisha`, which is why that service is deliberately left running. Needs an
+   **app access token** (`{app-id}|{app-secret}`) or one change in the Meta
+   console: WhatsApp → Configuration → Callback URL →
+   `https://khoji-e5crtuobjq-el.a.run.app/webhook/meta`. Retire `edudisha`
+   after that.
+3. **Old open item, kept for the record: renaming the Cloud Run service** — `SERVICE=khoji ./deploy/deploy.sh` creates a
    *second* service on a *new* URL; the Meta webhook and every shared link must be
    re-pointed the same day. The GCP project id `edudisha-bot` cannot be renamed
    at all. Left as-is deliberately.

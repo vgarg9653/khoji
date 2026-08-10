@@ -9,13 +9,13 @@ set -euo pipefail
 PROVIDER="${WHATSAPP_PROVIDER:-}"          # meta | twilio
 PROJECT_ID="${PROJECT_ID:-}"
 REGION="${REGION:-asia-south1}"
-# Still `edudisha` after the rename to Khoji.AI, and deliberately so: a Cloud
-# Run service cannot be renamed in place. Deploying under a new name creates a
-# SECOND service on a NEW URL, and the Meta webhook, the demo link and anything
-# already shared would keep pointing at the old one until re-registered.
-# Rename with `SERVICE=khoji ./deploy/deploy.sh` when you are ready to also
-# update the webhook URL in the Meta console — not before.
-SERVICE="${SERVICE:-edudisha}"
+# A Cloud Run service cannot be renamed in place, so `khoji` was deployed
+# alongside the original `edudisha` rather than replacing it. The old service is
+# deliberately still running: links shared before the rename keep working, and
+# both scale to zero so the second one costs nothing. Retire `edudisha` only
+# once the Meta webhook points here and no shared link needs it:
+#   gcloud run services delete edudisha --region asia-south1
+SERVICE="${SERVICE:-khoji}"
 META_PHONE_NUMBER_ID="${META_PHONE_NUMBER_ID:-}"   # filled from .env below if unset
 from_env() {   # read a key from .env, stripping inline comments
   sed -n "s/^$1=//p" .env 2>/dev/null | head -1 | tr -d '\r' \

@@ -156,7 +156,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 Check it came up:
 
 ```bash
-SERVICE_URL=$(gcloud run services describe edudisha --region $REGION --format='value(status.url)')
+SERVICE_URL=$(gcloud run services describe khoji --region $REGION --format='value(status.url)')
 curl -s $SERVICE_URL/health | python -m json.tool
 ```
 
@@ -240,7 +240,7 @@ stays effectively free.
 Logs:
 
 ```bash
-gcloud run services logs read edudisha --region $REGION --limit 50
+gcloud run services logs read khoji --region $REGION --limit 50
 ```
 
 ---

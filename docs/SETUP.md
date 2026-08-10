@@ -300,7 +300,7 @@ If Gemini is on, try Hindi: `मैं बिहार से हूं, कक�
 curl -s https://YOUR-URL/health
 
 # 2. What did it see?
-gcloud run services logs read edudisha --region asia-south1 --limit 50
+gcloud run services logs read khoji --region asia-south1 --limit 50
 ```
 
 - No log lines at all → Meta isn't calling you. Re-check Step 12, especially
@@ -328,7 +328,7 @@ Store it as a new version and restart:
 printf '%s' "YOUR_PERMANENT_TOKEN" | \
   gcloud secrets versions add meta-access-token --data-file=-
 
-gcloud run services update edudisha --region asia-south1
+gcloud run services update khoji --region asia-south1
 ```
 
 ## Step 15 — Bring in your own number
@@ -373,7 +373,7 @@ The deploy script warns you if the dataset is more than 7 days old.
 | Where am I? | `./deploy/check.sh` |
 | Test locally, no WhatsApp | `./.venv/bin/python bot/simulate.py` |
 | Is it alive? | `curl -s https://YOUR-URL/health` |
-| What went wrong? | `gcloud run services logs read edudisha --region asia-south1 --limit 50` |
+| What went wrong? | `gcloud run services logs read khoji --region asia-south1 --limit 50` |
 | Redeploy | `./deploy/deploy.sh` |
 | Which Gemini models? | `./.venv/bin/python bot/llm.py` |
 

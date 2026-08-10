@@ -9,7 +9,7 @@
 **Web demo (open to anyone, any device):**
 
 ```
-https://edudisha-e5crtuobjq-el.a.run.app/demo
+https://khoji-e5crtuobjq-el.a.run.app/demo
 ```
 
 WhatsApp-styled chat, same engine and same data as the real bot.
@@ -24,7 +24,7 @@ WhatsApp-styled chat, same engine and same data as the real bot.
 
 Then reply with a result number for the deadline, documents and official link.
 
-**Health/status:** `https://edudisha-e5crtuobjq-el.a.run.app/health`
+**Health/status:** `https://khoji-e5crtuobjq-el.a.run.app/health`
 
 ---
 

@@ -8,7 +8,7 @@ messages to arrive, and you can re-record instantly.
 
 **Before recording:**
 ```bash
-gcloud run services update edudisha --region asia-south1 --min-instances 1
+gcloud run services update khoji --region asia-south1 --min-instances 1
 ```
 Removes the ~10s cold start. Set back to `0` afterwards.
 

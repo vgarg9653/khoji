@@ -103,7 +103,7 @@ if command -v gcloud >/dev/null 2>&1; then
     # ------------------------------------------------------------ step 7
     step "STEP 7 — deployed service"
     REGION="${REGION:-asia-south1}"
-    URL=$(gcloud run services describe edudisha --region "$REGION" \
+    URL=$(gcloud run services describe khoji --region "$REGION" \
           --format='value(status.url)' 2>/dev/null)
     if [[ -n "$URL" ]]; then
       ok "deployed at $URL"
@@ -117,7 +117,7 @@ if command -v gcloud >/dev/null 2>&1; then
         echo "     webhook URL for Meta:  ${URL}/webhook/meta"
       else
         bad "service deployed but not responding"
-        note_next "Check logs:  gcloud run services logs read edudisha --region $REGION --limit 50"
+        note_next "Check logs:  gcloud run services logs read khoji --region $REGION --limit 50"
       fi
     else
       bad "not deployed yet"

@@ -15,7 +15,7 @@ of fees. The money exists. Finding it does not. That is the problem this solves.
 
 **No install, no login, works on any device:**
 
-### → https://edudisha-e5crtuobjq-el.a.run.app/demo
+### → https://khoji-e5crtuobjq-el.a.run.app/demo
 
 Three things worth typing:
 
