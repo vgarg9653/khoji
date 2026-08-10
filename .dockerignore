@@ -1,0 +1,15 @@
+.venv/
+data/raw/
+data/interim/
+data/logs/
+data/needs_review/
+deliverables/review/
+deliverables/compliance/
+deliverables/discovery/
+src/
+tests/
+docs/
+*.pyc
+__pycache__/
+.git/
+.claude/

@@ -1,0 +1,71 @@
+group,domain,status,decision,crawlable,crawl_delay,n_disallow,n_sitemaps,reason,note
+central,aicte.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),AICTE (non-www alias of www.aicte.gov.in)
+central,csirhrdg.res.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),CSIR-UGC NET JRF
+central,dst.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Dept of Science & Technology
+central,ksb.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Kendriya Sainik Board (PMSS)
+central,labour.gov.in,403,BLOCKED_WAF,False,,0,0,robots.txt 403 and homepage returned 403; server refuses our UA outright,Ministry of Labour (beedi/mine workers wards)
+central,minorityaffairs.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Ministry of Minority Affairs
+central,online-inspire.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),DST INSPIRE-SHE
+central,socialjustice.gov.in,200,ALLOW_NO_ROBOTS,True,,0,0,"soft-404: robots.txt served HTML, treated as absent",MoSJE (SC/OBC/EWS/disability schemes)
+central,tribal.nic.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Ministry of Tribal Affairs
+central,wcd.gov.in,200,BLOCKED_ROBOTS,False,,1,0,User-agent: * -> Disallow: /,Ministry of Women & Child Development
+central,www.aicte-jk-scholarship-gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),PMSSS J&K/Ladakh
+central,www.aicte.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),"AICTE (Pragati, Saksham, PMSSS)"
+central,www.desw.gov.in,403,ALLOW_ROBOTS_403,True,,0,0,robots.txt 403s but homepage serves 200 to our UA; RFC 9309 treats 4xx robots.txt as unavailable,Dept of Ex-Servicemen Welfare (PM Scholarship)
+central,www.education.gov.in,403,BLOCKED_WAF,False,,0,0,robots.txt 403 and homepage returned 403; server refuses our UA outright,Ministry of Education
+central,www.indiaculture.gov.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Ministry of Culture scholarships
+central,www.nta.ac.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),National Testing Agency (NMMSS/NTSE ops)
+central,www.ugc.gov.in,403,ALLOW_ROBOTS_403,True,,0,0,robots.txt 403s but homepage serves 200 to our UA; RFC 9309 treats 4xx robots.txt as unavailable,UGC
+central,www.vidyalakshmi.co.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Vidya Lakshmi (education loan+scholarship)
+central,yas.nic.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Ministry of Youth Affairs & Sports
+discovery,www.buddy4study.com,200,ALLOW_WITH_EXCLUSIONS,True,,2,1,2 disallowed path prefix(es),discovery index ONLY (names + official domains)
+national,scholarships.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),National Scholarship Portal (NSP)
+private,licindia.in,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",LIC Golden Jubilee Foundation
+private,ntpc.co.in,403,ALLOW_ROBOTS_403,True,,0,0,robots.txt 403s but homepage serves 200 to our UA; RFC 9309 treats 4xx robots.txt as unavailable,NTPC (non-www alias)
+private,ongcindia.com,200,ALLOW_FULL,True,,0,1,"robots.txt present, no restrictions",ONGC CSR scholarship
+private,sail.co.in,200,ALLOW_WITH_EXCLUSIONS,True,,26,0,26 disallowed path prefix(es),SAIL CSR
+private,www.adityabirlascholars.net,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",Aditya Birla Scholarship
+private,www.colgate.co.in,200,ALLOW_NO_ROBOTS,True,,0,0,"soft-404: robots.txt served HTML, treated as absent",Colgate Keep India Smiling
+private,www.colgate.com,200,ALLOW_WITH_EXCLUSIONS,True,,10,10,10 disallowed path prefix(es),Colgate global (redirect target from colgate.co.in)
+private,www.gailonline.com,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),GAIL Utkarsh / CSR
+private,www.hdfcbank.com,403,BLOCKED_WAF,False,,0,0,robots.txt 403 and homepage returned 403; server refuses our UA outright,HDFC Bank Parivartan ECSS
+private,www.indianoil.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,IndianOil scholarships
+private,www.jindalsteel.in,200,ALLOW_WITH_EXCLUSIONS,True,,1,1,1 disallowed path prefix(es),JSPL (redirect target from jindalsteelpower.com)
+private,www.jindalsteelpower.com,200,ALLOW_WITH_EXCLUSIONS,True,,1,1,1 disallowed path prefix(es),JSPL Foundation
+private,www.legrand.co.in,200,ALLOW_WITH_EXCLUSIONS,True,,6,1,6 disallowed path prefix(es),Legrand Empowering Scholarship
+private,www.northsouth.org,200,ALLOW_WITH_EXCLUSIONS,True,,5,0,5 disallowed path prefix(es),Foundation for Excellence (FFE)
+private,www.ntpc.co.in,403,ALLOW_ROBOTS_403,True,,0,0,robots.txt 403s but homepage serves 200 to our UA; RFC 9309 treats 4xx robots.txt as unavailable,NTPC CSR scholarship
+private,www.reliancefoundation.org,200,ALLOW_WITH_EXCLUSIONS,True,,33,0,33 disallowed path prefix(es),Reliance Foundation
+private,www.santoorscholarship.com,200,ALLOW_WITH_EXCLUSIONS,True,,5,0,5 disallowed path prefix(es),Santoor Women's Scholarship
+private,www.sitaramjindalfoundation.org,200,ALLOW_WITH_EXCLUSIONS,True,,68,1,68 disallowed path prefix(es),Sitaram Jindal Foundation
+private,www.tatatrusts.org,200,ALLOW_WITH_EXCLUSIONS,True,,1,1,1 disallowed path prefix(es),Tata Trusts
+private,www.tatatrusts.org.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Tata Trusts alias
+state,directorateofhighereducation.assam.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Assam
+state,edistrict.delhigovt.nic.in,200,ALLOW_NO_ROBOTS,True,,0,0,"soft-404: robots.txt served HTML, treated as absent",Delhi
+state,education.rajasthan.gov.in,200,ALLOW_WITH_EXCLUSIONS,True,,27,1,27 disallowed path prefix(es),Rajasthan Education Dept
+state,egrantz.kerala.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Kerala e-Grantz
+state,ekalyan.cgg.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Jharkhand e-Kalyan
+state,harchhatravratti.highereduhry.ac.in,200,ALLOW_WITH_EXCLUSIONS,True,,13,0,13 disallowed path prefix(es),Haryana
+state,hpepass.cgg.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Himachal Pradesh ePASS
+state,hte.rajasthan.gov.in,302,UNREACHABLE,False,,0,0,could not retrieve robots.txt (302); failing closed,Rajasthan Higher & Technical Education
+state,jkhighereducation.nic.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,J&K Higher Education
+state,jnanabhumi.apcfss.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Andhra Pradesh Jnanabhumi
+state,mahadbt.maharashtra.gov.in,200,ALLOW_FULL,True,,0,1,"robots.txt present, no restrictions",Maharashtra MahaDBT
+state,mahadbt2.maharashtra.gov.in,200,ALLOW_FULL,True,,0,1,"robots.txt present, no restrictions",MahaDBT (redirect target)
+state,medhasoft.bih.nic.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Bihar
+state,postmatric-scholarship.cg.nic.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Chhattisgarh
+state,rajasthan.gov.in,200,ALLOW_WITH_EXCLUSIONS,True,,116,1,116 disallowed path prefix(es),Rajasthan state portal
+state,rajshaladarpan.rajasthan.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Rajasthan Shala Darpan
+state,scholarship.odisha.gov.in,200,ALLOW_NO_ROBOTS,True,,0,0,"soft-404: robots.txt served HTML, treated as absent",Odisha
+state,scholarship.rajasthan.gov.in,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",Rajasthan scholarship (alias)
+state,scholarship.up.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Uttar Pradesh
+state,scholarshipportal.mp.nic.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,Madhya Pradesh (NXDOMAIN - retest)
+state,scholarships.punjab.gov.in,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",Punjab
+state,sje.rajasthan.gov.in,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",Rajasthan SJE scholarships
+state,sjmsnew.rajasthan.gov.in,200,ALLOW_FULL,True,,0,0,"robots.txt present, no restrictions",Rajasthan SJMS scholarship portal
+state,ssp.postmatric.karnataka.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Karnataka SSP
+state,svmcm.wbhed.gov.in,ERR:ConnFail,UNREACHABLE,False,,0,0,could not retrieve robots.txt (ERR:ConnFail); failing closed,West Bengal Swami Vivekananda Merit-cum-Means
+state,telanganaepass.cgg.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Telangana ePASS
+state,tnesevai.tn.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Tamil Nadu e-Sevai
+state,uk.gov.in,200,ALLOW_NO_ROBOTS,True,,0,0,"soft-404: robots.txt served HTML, treated as absent",Uttarakhand
+state,www.digitalgujarat.gov.in,404,ALLOW_NO_ROBOTS,True,,0,0,no robots.txt (404),Gujarat Digital Gujarat

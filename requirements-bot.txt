@@ -1,0 +1,9 @@
+# Runtime dependencies for the WhatsApp bot only (see requirements.txt for the
+# crawler). Kept separate so the Cloud Run image does not ship Playwright.
+fastapi
+uvicorn[standard]
+python-multipart
+httpx
+google-genai
+google-cloud-firestore
+python-dotenv

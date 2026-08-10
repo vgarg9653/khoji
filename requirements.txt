@@ -1,0 +1,25 @@
+# Data pipeline
+requests
+beautifulsoup4
+lxml
+playwright            # NSP and other JS-rendered portals; run `playwright install chromium`
+python-dateutil
+pypdf                 # fast PDF text extraction
+pdfminer.six          # fallback for PDFs pypdf cannot read
+
+# WhatsApp bot
+fastapi
+uvicorn[standard]
+httpx                 # sending replies via Meta's Graph API
+python-multipart      # required by FastAPI to read Twilio's form-encoded webhook
+
+# Tests
+pytest
+
+# Optional, for scanned guideline PDFs. Not pip-installable — install the
+# binaries yourself, e.g. `brew install tesseract poppler` on macOS or
+# `apt install tesseract-ocr poppler-utils` on Debian/Ubuntu. Without them the
+# OCR step is skipped and the affected records stay flagged rather than guessed.
+#   tesseract
+#   poppler (provides pdftoppm)
+python-dotenv

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Khoji.AI — try it</title>
+<!--
+  A WhatsApp-shaped web chat, served by the same Cloud Run service and driven by
+  the same engine as the real bot. It exists so the product can be demonstrated
+  without depending on a WhatsApp number being approved.
+
+  Deliberately one self-contained file: no CDN, no framework, no build step.
+  It loads on a slow connection, which is the same constraint the actual users
+  have.
+-->
+<style>
+  :root{
+    --bg:#0b141a; --panel:#111b21; --head:#202c33; --in:#202c33; --out:#005c4b;
+    --txt:#e9edef; --dim:#8696a0; --accent:#00a884; --link:#53bdeb;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#eae6df; --panel:#efeae2; --head:#f0f2f5; --in:#fff; --out:#d9fdd3;
+           --txt:#111b21; --dim:#667781; --accent:#008069; --link:#027eb5; }
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    background:var(--bg); color:var(--txt); display:flex; justify-content:center;
+  }
+  .phone{
+    width:100%; max-width:480px; height:100dvh; display:flex; flex-direction:column;
+    background:var(--panel); box-shadow:0 0 40px rgba(0,0,0,.35);
+  }
+  header{
+    background:var(--head); padding:10px 14px; display:flex; align-items:center;
+    gap:12px; flex-shrink:0; border-bottom:1px solid rgba(0,0,0,.1);
+  }
+  .avatar{
+    width:40px;height:40px;border-radius:50%;background:var(--accent);
+    display:grid;place-items:center;font-size:20px;flex-shrink:0;
+  }
+  .who{line-height:1.25;min-width:0}
+  .who b{font-size:16px;display:block}
+  .who span{font-size:12px;color:var(--dim)}
+  #log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .msg{
+    max-width:82%; padding:7px 10px; border-radius:8px; font-size:15px;
+    line-height:1.45; white-space:pre-wrap; word-wrap:break-word;
+    box-shadow:0 1px .5px rgba(0,0,0,.13); position:relative;
+  }
+  .bot{background:var(--in); align-self:flex-start; border-top-left-radius:0}
+  .me{background:var(--out); align-self:flex-end; border-top-right-radius:0}
+  .msg a{color:var(--link)}
+  .time{font-size:11px;color:var(--dim);float:right;margin:6px 0 -4px 8px}
+  .typing{display:flex;gap:4px;padding:12px 14px}
+  .typing i{
+    width:7px;height:7px;border-radius:50%;background:var(--dim);
+    animation:blink 1.3s infinite;
+  }
+  .typing i:nth-child(2){animation-delay:.2s}
+  .typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
+  form{
+    display:flex;gap:8px;padding:10px;background:var(--head);flex-shrink:0;
+    padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  }
+  input{
+    flex:1;border:0;border-radius:20px;padding:11px 16px;font-size:16px;
+    background:var(--in);color:var(--txt);outline:none;min-width:0;
+  }
+  button{
+    border:0;border-radius:50%;width:44px;height:44px;background:var(--accent);
+    color:#fff;font-size:19px;cursor:pointer;flex-shrink:0;
+  }
+  button:disabled{opacity:.5;cursor:default}
+  .chips{display:flex;gap:6px;padding:0 14px 10px;flex-wrap:wrap}
+  .chips button{
+    width:auto;height:auto;border-radius:14px;padding:6px 12px;font-size:13px;
+    background:transparent;border:1px solid var(--dim);color:var(--dim);
+  }
+  .note{
+    font-size:11px;color:var(--dim);text-align:center;padding:6px 14px 10px;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header>
+    <div class="avatar">🎓</div>
+    <div class="who">
+      <b>Khoji.AI</b>
+      <span id="status">online</span>
+    </div>
+  </header>
+
+  <div id="log"></div>
+
+  <div class="chips" id="chips">
+    <button data-send="hi">hi</button>
+    <button data-send="Rajasthan">Rajasthan</button>
+    <button data-send="मैं राजस्थान से हूँ, कक्षा 12">Hindi</button>
+    <button data-send="restart">restart</button>
+  </div>
+
+  <form id="f" autocomplete="off">
+    <input id="q" placeholder="Type a message" autofocus>
+    <button type="submit" id="send">➤</button>
+  </form>
+  <div class="note">Demo of the WhatsApp bot — same engine, same verified data.</div>
+</div>
+
+<script>
+// A per-browser id so two people demoing at once don't share a conversation.
+const KEY = "khoji-demo-id";
+let id = localStorage.getItem(KEY);
+if (!id) { id = "demo-" + Math.random().toString(36).slice(2, 11); localStorage.setItem(KEY, id); }
+
+const log = document.getElementById("log");
+const form = document.getElementById("f");
+const input = document.getElementById("q");
+const sendBtn = document.getElementById("send");
+const status = document.getElementById("status");
+
+const clock = () => new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+
+function esc(s){
+  return s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
+
+// WhatsApp's own markup: *bold*, _italic_, and bare URLs become links.
+function render(text){
+  let h = esc(text);
+  h = h.replace(/(https?:\/\/[^\s<]+)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  h = h.replace(/\*([^*\n]+)\*/g, "<b>$1</b>");
+  h = h.replace(/_([^_\n]+)_/g, "<i>$1</i>");
+  return h;
+}
+
+function bubble(text, who){
+  const d = document.createElement("div");
+  d.className = "msg " + who;
+  d.innerHTML = render(text) + `<span class="time">${clock()}</span>`;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+function typing(){
+  const d = document.createElement("div");
+  d.className = "msg bot typing";
+  d.innerHTML = "<i></i><i></i><i></i>";
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+async function send(text){
+  if (!text.trim()) return;
+  bubble(text, "me");
+  input.value = "";
+  sendBtn.disabled = true;
+  status.textContent = "typing…";
+  const dots = typing();
+
+  try {
+    const r = await fetch("/webhook/test", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({phone: id, text})
+    });
+    const data = await r.json();
+    dots.remove();
+    // Stagger replies slightly so a multi-message answer reads naturally
+    // rather than appearing as one wall of text.
+    for (const [i, msg] of (data.replies || []).entries()) {
+      await new Promise(res => setTimeout(res, i === 0 ? 120 : 420));
+      bubble(msg, "bot");
+    }
+  } catch (e) {
+    dots.remove();
+    bubble("Couldn't reach the server. Check your connection and try again.", "bot");
+  } finally {
+    sendBtn.disabled = false;
+    status.textContent = "online";
+    input.focus();
+  }
+}
+
+form.addEventListener("submit", e => { e.preventDefault(); send(input.value); });
+document.getElementById("chips").addEventListener("click", e => {
+  const b = e.target.closest("button[data-send]");
+  if (b) send(b.dataset.send);
+});
+
+// Open with the real welcome message rather than a hardcoded greeting, so the
+// demo can never drift from what the bot actually says.
+send("hi");
+</script>
+</body>
+</html>

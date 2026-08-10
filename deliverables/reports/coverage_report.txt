@@ -1,0 +1,216 @@
+==============================================================================
+EduDisha — scholarship dataset summary
+==============================================================================
+
+Total records in db : 251
+Top-100 tier        : 100
+Backlog tier        : 151
+
+------------------------------------------------------------------------------
+TOP 100 — counts by provider_type
+------------------------------------------------------------------------------
+  central_govt       89  █████████████████████████···
+  state_govt          7  ██··························
+  private             4  █···························
+
+------------------------------------------------------------------------------
+TOP 100 — state / geography coverage
+------------------------------------------------------------------------------
+  national (all states)    30  ████████····················
+  scope not stated          0  ····························
+  named states:
+    Jammu and Kashmir                    7
+    Himachal Pradesh                     7
+    Delhi                                6
+    Ladakh                               5
+    Goa                                  5
+    Assam                                5
+    Andaman and Nicobar Islands          5
+    Puducherry                           4
+    Dadra and Nagar Haveli and Daman and Diu   4
+    Tripura                              4
+    Gujarat                              4
+    Sikkim                               4
+    Chandigarh                           3
+    Manipur                              3
+    Punjab                               2
+  distinct states represented: 24
+
+------------------------------------------------------------------------------
+TOP 100 — education level coverage
+------------------------------------------------------------------------------
+  school             72  ████████████████████········
+  professional       21  ██████······················
+  PG                 20  ██████······················
+  UG                 16  ████························
+  diploma            13  ████························
+  PhD                 9  ███·························
+  level not stated     8
+
+------------------------------------------------------------------------------
+TOP 100 — category coverage
+------------------------------------------------------------------------------
+  OBC                28  ████████····················
+  ST                 27  ████████····················
+  DNT                18  █████·······················
+  SC                 15  ████························
+  PwD                 5  █···························
+  category not stated   27
+
+------------------------------------------------------------------------------
+TOP 100 — completeness and trust
+------------------------------------------------------------------------------
+  average field completeness : 53.5%
+  best / worst               : 67.7% / 32.3%
+  with a deadline stored     : 84
+  deadline VERIFIED on source: 55
+  confidence=high            : 61
+  confidence=medium          : 39
+  with official_url          : 92
+  status active              : 84
+  status unknown             : 16
+  status expired             : 0
+
+------------------------------------------------------------------------------
+TOP 100 — needs_review (69 records)
+------------------------------------------------------------------------------
+  #1    Scholarship For Top Class Education For Students Wit
+        reason: guidelines PDF covers 3 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #4    Prime Minister'S Scholarship Scheme For Ministry Of 
+        reason: deadline marked tentative
+  #5    PM-USP – Central Sector Scheme Of Scholarship For Co
+        reason: income ceiling differs from official page
+  #7    Pre Matric Scholarship For Students With Disabilitie
+        reason: guidelines PDF covers 3 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #9    Central Sector Scholarship Of Top Class Education Fo
+        reason: deadline marked tentative
+  #12   PM YASASVI Central Sector Scheme Of Top Class Educat
+        reason: NSP marks this scheme's dates as tentative; income ceiling differs from official page
+  #13   Prime Minister'S Scholarship Scheme For Central Arme
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked; guidelines PDF covers 2 schemes; scheme-specific values (class range, amo
+  #14   Prime Minister'S Scholarship Scheme For Wards Of Sta
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked; guidelines PDF covers 2 schemes; scheme-specific values (class range, amo
+  #20   Financial Assistance For Education To The Wards Of B
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #21   Icar Junior Research Fellowships(Jrf) And Senior Res
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #22   Icar Post Graduate Scholarship(Pgs)                 
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #23   National Scholarship For Post Graduate Studies      
+        reason: NSP marks this scheme's dates as tentative
+  #24   PM YASASVI Post Matric Scholarship Scheme For OBC,EB
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #27   PM YASASVI Pre Matric Scholarship Scheme For OBC EBC
+        reason: date not yet announced
+  #28   PM YASASVI Pre Matric Scholarship Scheme For OBC EBC
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked; date not yet announced
+  #29   Swami Vivekanand Utkrisht Charavriti Yojana-Himachal
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #31   Icar National Talent Scholarship(Nts-Pg)            
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #32   Icar National Talent Scholarship(Nts-Ug)            
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #33   Centrally Sponsored Scheme Of Post Matric Scholarshi
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #34   PM YASASVI Post Matric Scholarship Scheme For OBC St
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #35   Postmatric Scholarship For OBC Students - Tripura   
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #36   Arunachal Pradesh State Stipend Scheme              
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #37   Ishan Uday Special Scholarship Scheme For NER       
+        reason: NSP marks this scheme's dates as tentative; income ceiling differs from official page
+  #38   Our Scholars 2025-26                                
+        reason: unstructured page: too few fields extracted
+  #39   PM YASASVI Post Matric Scholarship Scheme For OBC EB
+        reason: NSP marks this scheme's dates as tentative; income ceiling differs from official page
+  #40   Kalpana Chawla Chatravriti Yojana-Himachal Pradesh  
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #41   Centrally Sponsored Pre Matric Scholarship For SC St
+        reason: income ceiling differs from official page
+  #42   Centrally Sponsored Pre Matric Scholarship Scheme Fo
+        reason: income ceiling differs from official page
+  #43   Centrally Sponsored Scheme Of Post Matric Scholarshi
+        reason: income ceiling differs from official page
+  #44   Centrally Sponsored Scheme Of Pre Matric Scholarship
+        reason: income ceiling differs from official page
+  #45   Pre Matric Scholarship For SC Students Studying In C
+        reason: income ceiling differs from official page
+  #46   Pre Matric Scholarship To ST Students (Class Ix And 
+        reason: income ceiling differs from official page
+  #47   Umbrella Scheme For Education Of ST Students - Pre M
+        reason: income ceiling differs from official page
+  #48   Umbrella Scheme For Education Of ST Students - Pre M
+        reason: income ceiling differs from official page
+  #49   Umbrella Scheme For Education Of ST Studets - Pre Ma
+        reason: income ceiling differs from official page
+  #51   PM YASASVI Pre Matric Scholarship Scheme For OBC Stu
+        reason: date not yet announced
+  #52   Pre Matric Scholarship To OBC Students (Class 9 And 
+        reason: date not yet announced
+  #53   Centrally Sponsored Post Matric Scholarship Scheme F
+        reason: income ceiling differs from official page
+  #54   Post Matric Scholarship Scheme For ST Students - Nag
+        reason: income ceiling differs from official page
+  #55   Post Matric Scholarship To ST Students - Assam      
+        reason: income ceiling differs from official page
+  #56   Post Matric Scholarship To ST Students -Jammu And Ka
+        reason: income ceiling differs from official page
+  #57   Post Matric Scholarship To ST Students-Dnhdd        
+        reason: income ceiling differs from official page
+  #58   Pre-Matric Scholarship For SC Students Of Parents Or
+        reason: income ceiling differs from official page
+  #59   Umbrella Scheme For Education Of ST Childern - Post 
+        reason: income ceiling differs from official page
+  #60   Centrally Sponsored Post Matric Scholarship Scheme F
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #62   Post Matric Scholarship To SC Students -Dnhdd       
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #63   Pre Matric SC Cleaning And Health Hazard -Tripura   
+        reason: category eligibility not corroborated on official page
+  #69   Pre-Matric Scholarship For ST Students (For Class Ix
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #70   Post Matric Scholarship To ST Students - Mizoram    
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #71   Pre Matric Scholarship To ST Students (Class Ix And 
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #72   Pre-Matric Scholarship For SC Students (Class Ix And
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #73   Prematric Scholarship For SC Students Studying In Cl
+        reason: guidelines PDF covers 2 schemes; scheme-specific values (class range, amounts, award count) left null pending manual attribution
+  #74   Umbrella Scheme For Education Of ST Childern - Post 
+        reason: NSP marks this scheme's dates as tentative; income ceiling differs from official page
+  #75   Centrally Sponsored Scheme Of Post Matric Scholarshi
+        reason: NSP marks this scheme's dates as tentative
+  #76   Umbrella Scheme For Education Of ST Students-Pre Mat
+        reason: NSP marks this scheme's dates as tentative
+  #77   Centrally Sponsored Scheme Of Pre-Matric Scholarship
+        reason: NSP marks this scheme's dates as tentative
+  #80   PM YASASVI Pre Matric Scholarship Scheme For OBC ,EB
+        reason: date not yet announced
+  #81   PM YASASVI Pre Matric Scholarship Scheme For OBC,EBC
+        reason: date not yet announced
+  #82   PM YASASVI Post Matric Scholarship For OBC,EBC And D
+        reason: income ceiling differs from official page
+  #83   PM YASASVI Post Matric Scholarship For OBC,EBC And D
+        reason: income ceiling differs from official page
+  #84   PM YASASVI Pre-Matric Scholarships For OBC,EBC,DNT S
+        reason: income ceiling differs from official page
+  #90   Post Matric Scholarship For ST Students-Manipur     
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+  #92   Students Development schemes                        
+        reason: unstructured page: too few fields extracted
+  #93   Our Scholars 2022                                   
+        reason: unstructured page: too few fields extracted
+  #94   Our Scholars 2024-25                                
+        reason: unstructured page: too few fields extracted
+  #95   Our Scholars: Class of 2023                         
+        reason: unstructured page: too few fields extracted
+  #96   PM YASASVI Post Matric Scholarship Scheme For OBC EB
+        reason: NSP marks this scheme's dates as tentative
+  #97   PM YASASVI Pre Matric Scholarship Scheme For OBC EBC
+        reason: NSP marks this scheme's dates as tentative
+  #98   Dr.Ambedkar Medhavi Chatravriti Yojana For OBC Stude
+        reason: eligibility read via OCR from a scanned PDF; figures should be spot-checked
+
+==============================================================================

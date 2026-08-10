@@ -1,0 +1,55 @@
+# ── Secrets ─────────────────────────────────────────────────────────────
+# .env holds real API keys. It must never be committed. .env.example is the
+# safe, committed template — it documents every variable with placeholders.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+service-account*.json
+credentials*.json
+
+# ── Python ──────────────────────────────────────────────────────────────
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# ── Pipeline working files ──────────────────────────────────────────────
+# Everything in data/ is produced by `python pipeline.py`. It is large
+# (data/raw alone is ~400 MB of cached pages and PDFs) and fully reproducible,
+# so none of it belongs in the repo. The one output anybody actually needs —
+# the catalogue the bot serves — is committed under deliverables/dataset/.
+data/
+
+# ── Generated handoff folder ────────────────────────────────────────────
+# `src/make_deliverables.py` deletes and rebuilds deliverables/ from scratch,
+# so committing it wholesale would mean committing build output that changes
+# on every run. Three things are kept because they are small, stable and worth
+# reading without running anything:
+#
+#   dataset/bot_matching.json  the 219 scholarships the bot serves — also what
+#                              the Dockerfile copies into the image
+#   compliance/                the robots.txt policy and every URL we refused
+#   reports/                   the coverage summary
+deliverables/*
+!deliverables/dataset/
+deliverables/dataset/*
+!deliverables/dataset/bot_matching.json
+!deliverables/compliance/
+!deliverables/reports/
+
+# ── Business documents ──────────────────────────────────────────────────
+# The PRD and pitch deck are Barfi Institute's, not part of the software.
+# They stay on disk; they do not go into a public repository.
+Documents/
+
+# ── Local tool settings ─────────────────────────────────────────────────
+.claude/
+
+# ── OS / editor ─────────────────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
+*.swp
