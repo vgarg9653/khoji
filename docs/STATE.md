@@ -51,6 +51,22 @@ no pagination: central sector 31, centrally sponsored 105, state schemes 32 →
 Field completeness on the 219 served: income ceiling 34%, deadline 63%,
 documents 63%, amount 22%, marks cutoff 2%, re-verified 31%.
 
+## Repo layout (restructured 10 Aug 2026)
+
+Root holds `README.md` and nothing else in prose — everything moved under
+`docs/`: `SETUP.md` (was WALKTHROUGH.md), `DEPLOY.md`, `PRINCIPLES.md`, this
+file, and `dataset/` (was `docs/deliverables/`).
+
+`data/`, `Documents/` and most of `deliverables/` are git-ignored: the first two
+are large or private, the third is regenerated wholesale by
+`make_deliverables.py`. Three parts of `deliverables/` ARE committed because
+they are small and worth reading without running anything —
+`dataset/bot_matching.json` (the Dockerfile copies it), `compliance/`, `reports/`.
+
+`tools/` holds the two dev tools: `bench_models.py` (which model can do the job)
+and `probe_source.py` (does a new source need a browser — the first step when
+adding a state portal).
+
 ## Architecture in one paragraph
 
 An offline pipeline (`src/`, `pipeline.py`) crawls official sources under a
